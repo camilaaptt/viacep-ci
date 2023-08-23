@@ -1,0 +1,39 @@
+name: Consulta CEP
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+
+  workflow_dispatch:
+
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Passo 1 - Verificar versão do Newman e Node
+        run:
+          newman --version
+          node --version
+
+     
+      - name: Passo 2 - Instala o Newman-Reporter-Htmlextra
+        run: sudo npm install -g newman-reporter-htmlextra
+        
+
+      - name: Passo 3 - Executa a collection
+        run: newman run ./viacep-qacoders.postman_collection.json -e ./viacep.postman_environment.json --reporters cli, -r htmlextra --reporter-htmlextra-export ./results/Report.html
+   
+
+      - name: Passo 4 - Faz upload do report gerado
+        uses: actions/upload-artifact@v2
+        with:
+            name: report
+            path: ./results/Report.html
+        
