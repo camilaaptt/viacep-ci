@@ -1,0 +1,88 @@
+{
+	"info": {
+		"_postman_id": "1ae4e856-38f7-4efd-bfa9-88e0af554177",
+		"name": "viacep-qacoders",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "19255186"
+	},
+	"item": [
+		{
+			"name": "viacep-consulta",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"function zipCode() {\r",
+							"\r",
+							"    var zipCode = [\"13098-760\",\"13569-080\",\"06882-700\",\"08620-550\",\"14315-728\",\"13280-288\",\"07182-137\",\"02473-010\",\"14056-622\",\"13426-147\",\"66842-380\",\"68742-201\",\"68741-390\",\"66811-460\",\"67125-076\",\"67146-085\",\"66115-610\",\"68557-485\",\"68744-450\",\"68741-490\",\"21852-010\",\"21931-310\",\"24921-480\",\"28949-814\",\"23045-422\",\"27347-350\",\"25973-520\",\"21825-040\",\"22793-116\",\"21350-102\",\"52031-475\",\"54535-440\",\"53300-110\",\"53340843\",\"54789-222\",\"55004-420\",\"54460-389\",\"56313-440\",\"56903-316\",\"50860-380\",\"50690-690\",\"75905-727\",\"75264-004\",\"72859-234\",\"74594-452\",\"75114-320\",\"74480-110\",\"75102-272\",\"72900-023\",\"74553-570\"];\r",
+							"    \r",
+							"    var randomItem = zipCode[Math.floor(Math.random() * zipCode.length)];\r",
+							"\r",
+							"    return randomItem;  \r",
+							"}\r",
+							"\r",
+							"pm.variables.set((\"ZipCode\"), zipCode());"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Validar status code 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Validar que o campo CEP não seja vazio\", function () {\r",
+							"    const responseData = pm.response.json();\r",
+							"\r",
+							"    pm.expect(responseData.cep).to.exist.and.to.be.a('string').and.to.have.lengthOf.at.least(1, \"cep should not be empty\");\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Validar que o campo Logradouro não seja vazio\", function () {\r",
+							"    const responseData = pm.response.json();\r",
+							"\r",
+							"    pm.expect(responseData.logradouro).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Value should not be empty\");\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Validar que o campo Localidade não seja vazio\", function () {\r",
+							"    const responseData = pm.response.json();\r",
+							"\r",
+							"    pm.expect(responseData.localidade).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Value should not be empty\");\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Validar que o campo UF não seja vazio\", function () {\r",
+							"    const responseData = pm.response.json();\r",
+							"\r",
+							"    pm.expect(responseData.uf).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Value should not be empty\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/{{ZipCode}}/json/",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"{{ZipCode}}",
+						"json",
+						""
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
